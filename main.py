@@ -60,7 +60,21 @@ async def read_medication(request: Request):
         context=context
     )
 
-# --- 6. Example API Endpoint (Health Check) ---
+# --- 6. Chat Endpoint (NEW) ---
+@app.get("/chat", response_class=HTMLResponse)
+async def read_chat(request: Request):
+    """
+    Serves the Chat page (chat.html).
+    """
+    context = {"user_name": "Dr. Alex"}
+    return templates.TemplateResponse(
+        request=request, 
+        name="chat.html", 
+        context=context
+    )
+
+
+# --- 7. Example API Endpoint (Health Check) ---
 @app.get("/api/health")
 async def get_health_status():
     """
@@ -69,8 +83,6 @@ async def get_health_status():
     return {"status": "ok", "service": "Health App Backend", "version": "1.0"}
 
 
-# --- 7. Run the Server Block ---
+# --- 8. Run the Server Block ---
 if __name__ == "__main__":
-    # This block allows you to run the server using 'python main.py'
-    # 'reload=True' enables automatic restart on code changes during development
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

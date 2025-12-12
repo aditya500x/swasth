@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Chat</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define custom colors for Tailwind's arbitrary values */
+        .bg-trust-blue { background-color: #005A9C; }
+        .bg-calm-blue { background-color: #E8F4F8; }
+        .text-action-green { color: #00A79D; }
+        .bg-action-green { background-color: #00A79D; }
+        .text-neutral-gray { color: #333333; }
+        
+        body {
+            background-color: #F7F9FC;
+            background-image: radial-gradient(circle at center, #F7F9FC, #E8EEF5);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans">
+
+    <!-- Main Application Container (Full Screen) -->
+    <div class="w-full min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden">
+
+        <!-- Sidebar (Navigation Panel) - Primary Trust Blue -->
+        <aside class="w-full lg:w-64 bg-trust-blue text-white p-6 flex flex-col justify-between">
+            <div>
+                <h2 class="text-2xl font-bold mb-8">Health OS</h2>
+                
+                <!-- Navigation Items -->
+                <nav class="space-y-3">
+                    
+                    <!-- Dashboard -->
+                    <a href="/dashboard" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 font-medium transition duration-150">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    
+                    <!-- Medications -->
+                    <a href="/medication" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5-9.5-9.5c-1.2-1.2-1.2-3.4 0-4.6l5.5-5.5c1.2-1.2 3.4-1.2 4.6 0l9.5 9.5c1.2 1.2 1.2 3.4 0 4.6l-5.5 5.5c-1.2 1.2-3.4 1.2-4.6 0z"/><path d="m7.5 7.5 9 9"/></svg>
+                        <span>Medications</span>
+                    </a>
+                    
+                    <!-- Diet -->
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18"/><path d="M4 16v-6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v6"/><path d="M8 20h8"/><path d="M12 4v16"/></svg>
+                        <span>Diet</span>
+                    </a>
+
+                    <!-- Lifestyle -->
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5 4 4-4 4"/><path d="M13 16h8"/><path d="M13 20h8"/><path d="m4 4 4 4"/></svg>
+                        <span>Lifestyle</span>
+                    </a>
+                    
+                    <!-- Chat (Active Link) -->
+                    <a href="/chat" class="flex items-center space-x-3 p-3 rounded-xl bg-trust-blue/70 hover:bg-trust-blue/90 font-medium transition duration-150 border border-white/30">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <span>Chat</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- User Profile -->
+            <div class="mt-8 pt-4 border-t border-white/30">
+                <p class="font-semibold text-lg">{{ user_name }}</p>
+                <p class="text-sm opacity-80">AI Specialist</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area - Cleanliness White (#FFFFFF) -->
+        <main class="flex-1 flex flex-col h-screen">
+            
+            <!-- Chat Header -->
+            <header class="p-6 border-b border-gray-200">
+                <h1 class="text-3xl font-light text-neutral-gray">AI Health Assistant</h1>
+                <p class="text-sm text-gray-500 mt-1">Ask questions about your health, diet, or medication.</p>
+            </header>
+
+            <!-- Chat Messages Container -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50/50">
+                
+                <!-- Welcome Message (Assistant) -->
+                <div class="flex justify-start">
+                    <div class="max-w-xl bg-calm-blue text-neutral-gray p-4 rounded-xl shadow-md rounded-tl-none">
+                        <p class="font-semibold text-trust-blue mb-1">Health Assistant</p>
+                        <p>Hello! I'm ready to help you with your health queries. How can I assist you today?</p>
+                    </div>
+                </div>
+
+                <!-- Example User Message -->
+                <div class="flex justify-end">
+                    <div class="max-w-xl bg-action-green text-white p-4 rounded-xl shadow-md rounded-tr-none">
+                        <p>What are the key benefits of increasing my daily step count?</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Chat Input Area -->
+            <div class="p-4 border-t border-gray-200 bg-white">
+                <div class="flex space-x-3">
+                    <input type="text" id="chat-input" placeholder="Type your message here..." class="flex-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-trust-blue focus:border-trust-blue transition duration-150 text-neutral-gray shadow-inner" onkeypress="handleKeyPress(event)">
+                    <button id="send-button" class="bg-trust-blue hover:bg-trust-blue/90 text-white font-semibold py-3 px-6 rounded-xl transition duration-200 shadow-md">
+                        Send
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    
+    <script>
+        // Placeholder JavaScript for basic chat functionality
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.getElementById('chat-messages');
+
+        function appendMessage(sender, text, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+
+            const messageBubble = document.createElement('div');
+            messageBubble.className = `max-w-xl p-4 rounded-xl shadow-md ${
+                isUser 
+                ? 'bg-action-green text-white rounded-tr-none' 
+                : 'bg-calm-blue text-neutral-gray rounded-tl-none'
+            }`;
+
+            if (!isUser) {
+                const senderLabel = document.createElement('p');
+                senderLabel.className = 'font-semibold text-trust-blue mb-1';
+                senderLabel.textContent = 'Health Assistant';
+                messageBubble.appendChild(senderLabel);
+            }
+
+            const messageText = document.createElement('p');
+            messageText.textContent = text;
+            messageBubble.appendChild(messageText);
+
+            messageDiv.appendChild(messageBubble);
+            chatMessages.appendChild(messageDiv);
+            
+            // Auto-scroll to the bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (text === '') return;
+
+            // 1. Display User Message
+            appendMessage('User', text, true);
+            
+            // 2. Clear input
+            chatInput.value = '';
+
+            // 3. Simulate Assistant Response (Placeholder for actual Gemini API call)
+            const mockResponse = "That's a great question! Increasing your daily step count is fantastic for cardiovascular health, mood elevation, and weight management. Aim for consistency!";
+            
+            setTimeout(() => {
+                appendMessage('Assistant', mockResponse, false);
+            }, 1000); 
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
