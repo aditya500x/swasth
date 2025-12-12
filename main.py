@@ -3,7 +3,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-import uvicorn # <-- Added uvicorn import
+import uvicorn 
 
 # --- 1. Initialize FastAPI App ---
 app = FastAPI(
@@ -12,13 +12,14 @@ app = FastAPI(
 )
 
 # --- 2. Configure Template Directory ---
+# This points to the 'templates' folder where dashboard.html and medication.html reside.
 templates = Jinja2Templates(directory="templates")
 
-# --- 3. Root Endpoint (Existing) ---
+# --- 3. Root Endpoint ---
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     """
-    Serves the main index.html file.
+    Serves the main index.html file (Initial page).
     """
     return templates.TemplateResponse(
         request=request, 
@@ -26,7 +27,7 @@ async def read_root(request: Request):
         context={}
     )
 
-# --- 4. Dashboard Endpoint (Existing) ---
+# --- 4. Dashboard Endpoint ---
 @app.get("/dashboard", response_class=HTMLResponse)
 async def read_dashboard(request: Request):
     """
@@ -46,7 +47,20 @@ async def read_dashboard(request: Request):
         context=context
     )
 
-# --- 5. Example API Endpoint (Existing) ---
+# --- 5. Medication Endpoint ---
+@app.get("/medication", response_class=HTMLResponse)
+async def read_medication(request: Request):
+    """
+    Serves the Medication Tracker page (medication.html).
+    """
+    context = {"user_name": "Dr. Alex"}
+    return templates.TemplateResponse(
+        request=request, 
+        name="medication.html", 
+        context=context
+    )
+
+# --- 6. Example API Endpoint (Health Check) ---
 @app.get("/api/health")
 async def get_health_status():
     """
@@ -55,8 +69,8 @@ async def get_health_status():
     return {"status": "ok", "service": "Health App Backend", "version": "1.0"}
 
 
-# --- 6. Run the Server Block (NEW/UPDATED) ---
+# --- 7. Run the Server Block ---
 if __name__ == "__main__":
     # This block allows you to run the server using 'python main.py'
-    # The 'reload=True' flag enables automatic restart on code changes during development
+    # 'reload=True' enables automatic restart on code changes during development
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

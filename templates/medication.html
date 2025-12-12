@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medications</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define custom colors for Tailwind's arbitrary values */
+        .bg-trust-blue { background-color: #005A9C; }
+        .bg-calm-blue { background-color: #E8F4F8; }
+        .text-action-green { color: #00A79D; }
+        .bg-action-green { background-color: #00A79D; }
+        .text-neutral-gray { color: #333333; }
+        
+        body {
+            background-color: #F7F9FC;
+            background-image: radial-gradient(circle at center, #F7F9FC, #E8EEF5);
+        }
+        /* Custom style for the subtle hover effect on file input area */
+        #drop-zone:hover {
+            border-color: #005A9C;
+            background-color: #E8F4F8;
+            transition: all 0.2s;
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans">
+
+    <!-- Main Application Container (Full Screen) -->
+    <div class="w-full min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden">
+
+        <!-- Sidebar (Navigation Panel) - Primary Trust Blue (Duplicated for consistency) -->
+        <aside class="w-full lg:w-64 bg-trust-blue text-white p-6 flex flex-col justify-between">
+            <div>
+                <h2 class="text-2xl font-bold mb-8">Health OS</h2>
+                
+                <!-- Navigation Items -->
+                <nav class="space-y-3">
+                    
+                    <!-- Dashboard -->
+                    <a href="/dashboard" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 font-medium transition duration-150 border border-white/0">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    
+                    <!-- Medications (Active Link) -->
+                    <a href="/medication" class="flex items-center space-x-3 p-3 rounded-xl bg-trust-blue/70 hover:bg-trust-blue/90 font-medium transition duration-150 border border-white/30">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5-9.5-9.5c-1.2-1.2-1.2-3.4 0-4.6l5.5-5.5c1.2-1.2 3.4-1.2 4.6 0l9.5 9.5c1.2 1.2 1.2 3.4 0 4.6l-5.5 5.5c-1.2 1.2-3.4 1.2-4.6 0z"/><path d="m7.5 7.5 9 9"/></svg>
+                        <span>Medications</span>
+                    </a>
+                    
+                    <!-- Other Links -->
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18"/><path d="M4 16v-6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v6"/><path d="M8 20h8"/><path d="M12 4v16"/></svg>
+                        <span>Diet</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5 4 4-4 4"/><path d="M13 16h8"/><path d="M13 20h8"/><path d="m4 4 4 4"/></svg>
+                        <span>Lifestyle</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <span>Chat</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- User Profile -->
+            <div class="mt-8 pt-4 border-t border-white/30">
+                <p class="font-semibold text-lg">{{ user_name }}</p>
+                <p class="text-sm opacity-80">Health Professional</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area - Cleanliness White (#FFFFFF) -->
+        <main class="flex-1 p-6 lg:p-10">
+            
+            <!-- Header -->
+            <header class="mb-8 border-b border-gray-200 pb-4">
+                <h1 class="text-4xl font-light text-neutral-gray">Medication Analyzer</h1>
+                <p class="text-sm text-gray-500 mt-1">Upload a photo of a prescription or medication label for instant analysis.</p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Section 1: Image Upload -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-neutral-gray mb-4">1. Upload Image</h3>
+                    
+                    <div id="drop-zone" class="bg-calm-blue/50 p-6 rounded-xl border-4 border-dashed border-gray-300 transition duration-200 cursor-pointer text-center h-72 flex flex-col justify-center items-center relative">
+                        <!-- File Input (Hidden, styled by the surrounding div) -->
+                        <input type="file" id="image-upload" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        
+                        <svg class="w-12 h-12 text-trust-blue mb-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899V20a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5.101M16 7l-4-4-4 4M12 15V3"/></svg>
+                        
+                        <p class="text-lg font-medium text-neutral-gray">Drag & drop image here</p>
+                        <p class="text-sm text-gray-600">or click to browse (JPG, PNG)</p>
+                        
+                        <!-- Image Preview -->
+                        <img id="image-preview" class="hidden absolute inset-0 w-full h-full object-contain p-2 rounded-xl" src="" alt="Image Preview">
+                    </div>
+                    
+                    <button id="analyze-button" class="mt-4 w-full bg-trust-blue hover:bg-trust-blue/90 text-white font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md shadow-trust-blue/30" disabled>
+                        Analyze Medication
+                    </button>
+                </div>
+
+                <!-- Section 2: Analyzed Data -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-neutral-gray mb-4">2. Analyzed Data</h3>
+                    
+                    <div id="analysis-results" class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 min-h-[400px]">
+                        <div id="loading-indicator" class="hidden text-center text-trust-blue py-10">
+                            <svg class="animate-spin h-8 w-8 text-trust-blue mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <p class="text-sm font-medium">Analyzing image content...</p>
+                        </div>
+                        
+                        <ul id="data-list" class="space-y-4">
+                            <!-- Data items will be inserted here -->
+                            <li class="text-center text-gray-500 py-10">Upload an image to start the analysis.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        const uploadInput = document.getElementById('image-upload');
+        const dropZone = document.getElementById('drop-zone');
+        const previewImg = document.getElementById('image-preview');
+        const analyzeButton = document.getElementById('analyze-button');
+        const resultsList = document.getElementById('data-list');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        
+        // --- 1. Image Upload and Preview Logic ---
+
+        function handleFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    previewImg.classList.remove('hidden');
+                    // Hide original dropzone content (icons/text)
+                    dropZone.querySelector('svg').classList.add('hidden');
+                    dropZone.querySelector('p:nth-child(3)').classList.add('hidden');
+                    dropZone.querySelector('p:nth-child(4)').classList.add('hidden');
+                    
+                    analyzeButton.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Using alert only here for simple file validation error, should be replaced with a custom modal later.
+                // NOTE: This alert should be replaced with a custom UI modal in a production environment.
+                alert('Please upload a valid image file.'); 
+                uploadInput.value = null;
+            }
+        }
+
+        // Handle file selection via click
+        uploadInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Handle drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-trust-blue', 'bg-calm-blue');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-trust-blue', 'bg-calm-blue');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-trust-blue', 'bg-calm-blue');
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        
+        // --- 2. Mock Analysis Function (Placeholder for API Call) ---
+
+        analyzeButton.addEventListener('click', () => {
+            if (!uploadInput.files || uploadInput.files.length === 0) {
+                return;
+            }
+
+            loadingIndicator.classList.remove('hidden');
+            resultsList.innerHTML = '';
+            analyzeButton.disabled = true;
+
+            // In a real application, you would convert the image to base64
+            // and send it to a FastAPI endpoint (e.g., POST /api/analyze-medication).
+            
+            // Mock Data for display
+            setTimeout(() => {
+                loadingIndicator.classList.add('hidden');
+                analyzeButton.disabled = false;
+
+                const mockData = [
+                    { label: "Medication Name", value: "Acetaminophen 500mg" },
+                    { label: "Dosage", value: "Take 2 tablets (1000mg)" },
+                    { label: "Frequency", value: "Every 4-6 hours as needed" },
+                    { label: "Prescribing Doctor", value: "Dr. Eleanor Vance" },
+                    { label: "Refills Remaining", value: "2" },
+                ];
+
+                resultsList.innerHTML = mockData.map(item => `
+                    <li class="flex justify-between items-center border-b border-gray-100 pb-2">
+                        <span class="text-sm font-medium text-trust-blue">${item.label}:</span>
+                        <span class="text-base text-neutral-gray font-semibold">${item.value}</span>
+                    </li>
+                `).join('');
+
+            }, 2000); // Simulate network latency
+        });
+    </script>
+</body>
+</html>
