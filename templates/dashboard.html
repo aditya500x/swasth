@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define custom colors for Tailwind's arbitrary values */
+        .bg-trust-blue { background-color: #005A9C; }
+        .bg-calm-blue { background-color: #E8F4F8; }
+        .text-action-green { color: #00A79D; }
+        .bg-action-green { background-color: #00A79D; }
+        .text-neutral-gray { color: #333333; }
+        /* Simple macOS-style subtle background texture */
+        body {
+            /* Removed padding p-4 and p-8 for edge-to-edge look */
+            background-color: #F7F9FC;
+            background-image: radial-gradient(circle at center, #F7F9FC, #E8EEF5);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans">
+
+    <!-- Main Application Container (Now Full Screen) -->
+    <div class="w-full min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden">
+
+        <!-- Sidebar (Navigation Panel) - Primary Trust Blue -->
+        <aside class="w-full lg:w-64 bg-trust-blue text-white p-6 flex flex-col justify-between">
+            <div>
+                <h2 class="text-2xl font-bold mb-8">Health OS</h2>
+                
+                <!-- Navigation Items -->
+                <nav class="space-y-3">
+                    <a href="/dashboard" class="flex items-center space-x-3 p-3 rounded-xl bg-trust-blue/70 hover:bg-trust-blue/90 font-medium transition duration-150 border border-white/30">
+                        <!-- Icon Placeholder: Home -->
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <!-- Icon Placeholder: Calendar -->
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span>Appointments</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-trust-blue/50 transition duration-150">
+                        <!-- Icon Placeholder: Report -->
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>My Records</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- User Profile (Example context data from FastAPI) -->
+            <div class="mt-8 pt-4 border-t border-white/30">
+                <p class="font-semibold text-lg">{{ user_name }}</p>
+                <p class="text-sm opacity-80">Health Professional</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area - Cleanliness White (#FFFFFF) -->
+        <main class="flex-1 p-6 lg:p-10">
+            
+            <!-- Header -->
+            <header class="mb-8 border-b border-gray-200 pb-4">
+                <h1 class="text-4xl font-light text-neutral-gray">Your Health Overview</h1>
+                <p class="text-sm text-gray-500 mt-1">Status as of today, December 2025</p>
+            </header>
+
+            <!-- Key Metric Cards -->
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                
+                <!-- Card 1: Health Score -->
+                <div class="bg-calm-blue p-6 rounded-xl shadow-md border-b-4 border-trust-blue">
+                    <p class="text-sm font-semibold text-trust-blue mb-1">Overall Health Score</p>
+                    <p class="text-4xl font-extrabold text-neutral-gray">{{ health_score }}<span class="text-xl">%</span></p>
+                    <p class="text-xs text-gray-500 mt-2">Excellent progress this week.</p>
+                </div>
+
+                <!-- Card 2: Heart Rate -->
+                <div class="bg-calm-blue p-6 rounded-xl shadow-md border-b-4 border-action-green">
+                    <p class="text-sm font-semibold text-trust-blue mb-1">Avg. Resting Heart Rate</p>
+                    <p class="text-4xl font-extrabold text-neutral-gray">{{ heart_rate }}<span class="text-xl"> bpm</span></p>
+                    <p class="text-xs text-gray-500 mt-2">Within ideal range.</p>
+                </div>
+
+                <!-- Card 3: Sleep -->
+                <div class="bg-calm-blue p-6 rounded-xl shadow-md border-b-4 border-trust-blue">
+                    <p class="text-sm font-semibold text-trust-blue mb-1">Last Night's Sleep</p>
+                    <p class="text-4xl font-extrabold text-neutral-gray">{{ sleep_hours }}<span class="text-xl"> hrs</span></p>
+                    <p class="text-xs text-gray-500 mt-2">Goal: 8 hours.</p>
+                </div>
+
+                <!-- Card 4: Steps (Note: Jinja variable is used directly without filters) -->
+                <div class="bg-calm-blue p-6 rounded-xl shadow-md border-b-4 border-action-green" data-metric-id="steps">
+                    <p class="text-sm font-semibold text-trust-blue mb-1">Steps Today</p>
+                    <p class="text-4xl font-extrabold text-neutral-gray" id="steps-today-value">{{ steps_today }}</p>
+                    <p class="text-xs text-gray-500 mt-2">Keep moving towards 10k.</p>
+                </div>
+            </section>
+            
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Column 1 & 2: Charts/Graphs -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-semibold text-neutral-gray mb-4">Activity Trends (Placeholder)</h3>
+                    <!-- Placeholder for a dynamic chart -->
+                    <div class="h-64 flex items-center justify-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                        <p class="text-gray-400">Chart Visualization Area (e.g., Blood Pressure, Weight)</p>
+                    </div>
+                </div>
+
+                <!-- Column 3: Quick Actions & Log -->
+                <div class="lg:col-span-1 space-y-6">
+                    
+                    <!-- Quick Action Button -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                        <h3 class="text-lg font-semibold text-neutral-gray mb-4">Need Assistance?</h3>
+                        <button class="w-full bg-action-green hover:bg-opacity-90 text-white font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg shadow-action-green/30">
+                            Book New Appointment
+                        </button>
+                    </div>
+
+                    <!-- Recent Activity Log -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                        <h3 class="text-lg font-semibold text-neutral-gray mb-4">Recent Activity</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex justify-between items-center text-neutral-gray border-b border-gray-100 pb-2">
+                                <span>Medication Logged</span>
+                                <span class="text-xs text-gray-500 bg-calm-blue px-2 py-1 rounded">10 min ago</span>
+                            </li>
+                            <li class="flex justify-between items-center text-neutral-gray border-b border-gray-100 pb-2">
+                                <span>Annual Review Scheduled</span>
+                                <span class="text-xs text-gray-500 bg-calm-blue px-2 py-1 rounded">Yesterday</span>
+                            </li>
+                            <li class="flex justify-between items-center text-neutral-gray pb-2">
+                                <span>New Report Available</span>
+                                <span class="text-xs text-gray-500 bg-calm-blue px-2 py-1 rounded">3 days ago</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+    
+    <!-- Client-side script for formatting -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const stepsValueElement = document.getElementById('steps-today-value');
+            if (stepsValueElement) {
+                // Get the raw number (e.g., 9341)
+                const rawSteps = stepsValueElement.textContent.trim();
+                
+                // Convert to a number, format with commas, and add the unit
+                try {
+                    const formattedSteps = parseInt(rawSteps).toLocaleString();
+                    stepsValueElement.innerHTML = `${formattedSteps}<span class="text-xl"> steps</span>`;
+                } catch (e) {
+                    console.error("Error formatting steps data:", e);
+                    stepsValueElement.innerHTML = `N/A<span class="text-xl"> steps</span>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

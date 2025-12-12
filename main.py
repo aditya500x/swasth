@@ -2,8 +2,8 @@
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+import uvicorn # <-- Added uvicorn import
 
 # --- 1. Initialize FastAPI App ---
 app = FastAPI(
@@ -12,31 +12,41 @@ app = FastAPI(
 )
 
 # --- 2. Configure Template Directory ---
-# This tells FastAPI where to look for HTML files (in the 'templates' folder)
 templates = Jinja2Templates(directory="templates")
 
-# Note: If you add static files like compiled Tailwind CSS (e.g., /static/css/styles.css),
-# you would uncomment and configure the StaticFiles mount here:
-# app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
-# --- 3. Root Endpoint to Serve the HTML Page ---
+# --- 3. Root Endpoint (Existing) ---
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     """
-    Serves the main HTML file from the templates directory.
-    The `request` object is required by Jinja2 to render the template context.
+    Serves the main index.html file.
     """
-    # You can pass context variables here (e.g., {'app_name': 'My Health Tracker'})
-    # The 'request': request part is mandatory for Jinja2Templates
     return templates.TemplateResponse(
         request=request, 
         name="index.html", 
         context={}
     )
 
+# --- 4. Dashboard Endpoint (Existing) ---
+@app.get("/dashboard", response_class=HTMLResponse)
+async def read_dashboard(request: Request):
+    """
+    Serves the macOS-themed dashboard.html file.
+    """
+    # Example context data, you can pass real data here later
+    context = {
+        "user_name": "Dr. Alex",
+        "health_score": 88,
+        "heart_rate": 72,
+        "sleep_hours": 7.5,
+        "steps_today": 9341
+    }
+    return templates.TemplateResponse(
+        request=request, 
+        name="dashboard.html", 
+        context=context
+    )
 
-# --- 4. Example API Endpoint (Health Check) ---
+# --- 5. Example API Endpoint (Existing) ---
 @app.get("/api/health")
 async def get_health_status():
     """
@@ -45,11 +55,8 @@ async def get_health_status():
     return {"status": "ok", "service": "Health App Backend", "version": "1.0"}
 
 
-# --- 5. Run the Server (Optional, Uvicorn is usually run via the command line) ---
-# This block is primarily for quick testing or specialized deployment scenarios.
-# The standard way to run the app is shown below.
+# --- 6. Run the Server Block (NEW/UPDATED) ---
 if __name__ == "__main__":
-    import uvicorn
-    # The command to run this directly: python main.py
-    # This runs the app on http://127.0.0.1:8000
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # This block allows you to run the server using 'python main.py'
+    # The 'reload=True' flag enables automatic restart on code changes during development
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
